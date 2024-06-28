@@ -7,6 +7,7 @@ import 'swiper/css';
 import { useNavigate} from 'react-router-dom'
 import Button,{OutlinedButton} from '../button/Button'
 import Modal, { ModalContent } from "../modal/modal";
+// import New_button from "../button/new_button";
 
 const HeroSlider = (props) => {
 

@@ -1,0 +1,38 @@
+.game {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    background-color: #f7f7f7;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+.score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 16px;
+}
+
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: red;
+}
+.restart-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .restart-button:hover {
+    background-color: #45a049;
+  }

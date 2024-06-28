@@ -59,11 +59,11 @@
       width: 0;
       transition: all 0.5s ease;
       height: 2px;
-      background-color: #ff0000;
+      background-color: blue;
   }
   
   .active { 
-      color: #ff0000 !important;
+      color: blue !important;
   }
   .header__nav li.active::after,
   .header__nav li:hover::after { 

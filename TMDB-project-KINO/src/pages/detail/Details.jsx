@@ -9,13 +9,13 @@ import Movie from '../../components/movie/MovieList';
 import Preloader from '../../components/Preloader/Preloader';
 import TVSeasons from './TVSeasons';
 import { useFavorites } from './context';
-import { ChakraProvider } from '@chakra-ui/react'
-import {
-    Alert,
-    AlertIcon,
-    AlertTitle,
-    AlertDescription,
-} from '@chakra-ui/react'
+// import { ChakraProvider } from '@chakra-ui/react'
+// import {
+//     Alert,
+//     AlertIcon,
+//     AlertTitle,
+//     AlertDescription,
+// } from '@chakra-ui/react'
 
 const Detail = () => {
     const { category, id } = useParams();

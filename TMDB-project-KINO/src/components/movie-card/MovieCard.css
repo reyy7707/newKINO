@@ -31,7 +31,6 @@
     border-radius: 30px;
 }   
 .movie__link:hover{ 
-
     color: #ff0000;
 }
 @media (hover: hover) and (pointer: fine) {

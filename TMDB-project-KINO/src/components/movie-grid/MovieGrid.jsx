@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { category } from "../../api/tmdb";
 import MovieCard from "../movie-card/MovieCard.jsx";
-import Button, { OutlinedButton } from "../button/Button.jsx";
+import { OutlinedButton } from "../button/Button.jsx";
 import Input from '../input/input.jsx'
 
 const MovieGrid = (props) => {
@@ -130,9 +130,9 @@ const MovieSearch = (props) => {
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
       ></Input>
-      <Button className={"small"} onClick={goToSearch}>
+      <button className='px-2 py-1 ml-3 bg-blue-600 text-white rounded-full' onClick={goToSearch}>
         Search
-      </Button>
+      </button>
     </div>
   );
 };

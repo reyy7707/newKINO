@@ -6,14 +6,15 @@ import "../App.css";
 import MovieList from "../components/movie/MovieList";
 import { category, movieType, tvType } from "../api/tmdb";
 import Preloader from "../components/Preloader/Preloader";
-const Home = () => {  
+
+const Home = () => {
   const [isError, setError] = useState(false)
-  if(isError){ 
-    return <Preloader/>
+  if (isError) {
+    return <Preloader />
   }
   return (
     <>
-      <HeroSlider setError={setError}/>
+      <HeroSlider setError={setError} />
       <div className="home__container">
         <div className="section mb-3">
           <div className="section__header mb-2">
@@ -82,7 +83,7 @@ const Home = () => {
           </div>
           <MovieList setError={setError} category={category.person} isActor={true} type={'popular'} />
         </div>
-        
+
       </div>
     </>
   );

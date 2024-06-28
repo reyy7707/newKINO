@@ -20,6 +20,10 @@ const headerNav = [
     path: '/person'
   },
   {
+    display: 'Catalog',
+    path: '/catalog-filters'
+  },
+  {
     display: 'Profile',
     path: '/profile'
   }

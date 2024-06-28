@@ -1,8 +1,9 @@
-import './MovieCard.css' 
+import './MovieCard.css'
 import incon from '../../assets/img/play-regular-24.png' 
 import { Link } from 'react-router-dom'
-import Button from '../button/Button'
+// import New_button from '../button/new_button'
 import { category } from '../../api/tmdb'
+import Button from '../button/Button'
 import config from '../../api/apiConfig'  
 
 const MovieCard = ({item,isActor,...props}) => {   
@@ -15,7 +16,7 @@ const MovieCard = ({item,isActor,...props}) => {
     <Link className='movie__link' to={link}> 
         <div className='movie-card' style={{backgroundImage: `url(${isActor ? bag : bg})`}}>  
             <Button> 
-            <img src={incon} alt={item.title}/>
+                <img src={incon} alt={item.title}/>
             </Button>
         </div>
         <h3>{item.title || item.name}</h3>

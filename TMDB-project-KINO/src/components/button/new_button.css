@@ -2,21 +2,21 @@ button{
     cursor: pointer;
     font-family: 'Montserrat',sans-serif;
 }
-.btn{ 
-    border:  4px solid transparent;
-    background:  #ff0000 ; 
-    color: white;
-    border-radius: 23px;
+.new_btn{ 
+    border: 4px solid transparent;
+    background:  #4c7fec; 
+    color: rgb(47, 153, 252);
+    border-radius: 30px;
     padding: 0.5rem 1.8rem; 
     font-size: 1.5rem; 
     font-weight: 600; 
-    box-shadow:  0px 0px 7px 8px #ff00004d;
+    box-shadow:  0px 0px 7px 8px #002efd4d;
     position: relative;
 }
-.btn-outline{ 
+.new_btn-outline{ 
     border: 3px solid white;
     background-color: transparent ; 
-    color: rgb(255, 255, 255);
+    color: rgb(87, 128, 240);
     box-shadow: unset;
     transition: all 0.3 ease; 
     border-radius: 30px;
@@ -26,12 +26,12 @@ button{
     position: relative;
     transition: background-color 500ms ease, transform 500ms ease;
 } 
-.btn-outline:hover{ 
+.new_btn-outline:hover{ 
     box-shadow: unset;
-    color: #00c3ff;
+    color: #ffffff;
     background-color: white !important;
 }
-.btn.small, .btn-outline.small{ 
+.new_btn.small, .new_btn-outline.small{ 
     border-width:2px ;
     padding: .25rem 1.5rem;
     font-size: 1rem;
