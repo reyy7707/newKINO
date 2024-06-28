@@ -177,17 +177,12 @@ const MainContent = ({
     adminPanel,
     setAdminPanel,
 }) => {
-    const { favorites, addToFavorites, removeFromFavorites } = useFavorites(); // Используем контекст из FavoritesContext
-
-    const handleAddToFavorites = (item) => {
-        addToFavorites(item);
-    };
+    const { favorites, removeFromFavorites } = useFavorites();
 
     const handleRemoveFromFavorites = (id) => {
         removeFromFavorites(id);
     };
     const [check, setCheck] = useState(true)
-    // const [name, setName] = useState('')
 
     const userSignOut = () => {
         signOut(auth)
@@ -196,10 +191,6 @@ const MainContent = ({
             })
             .catch((e) => console.log(e));
     };
-    // const handleUpdateUserName = () => {
-    //     setName(userName)
-    //     console.log(`Updated user name: ${userName}`);
-    // };
     return (
         <main className="main-content relative top-24">
             <section className="user-info">
@@ -221,19 +212,33 @@ const MainContent = ({
 
                 </div>
             </section>
-            <div className="favorites ml-4">
-                <h3>Избранные</h3>
-                <ul>
-                    {favorites?.map((item) => (
-                        <li key={item.id}>
-                            <Link to={`/movie/${item.id}`}>
-                                <span>{item.title || item.name}</span>
-                            </Link>
-                            <button onClick={() => handleRemoveFromFavorites(item.id)}>Удалить</button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            {check
+                ?
+                <>
+                    <div className="favorites ml-4">
+                        <h3>Избранные</h3>
+                        <ul>
+                            {favorites?.map((item) => (
+                                <li key={item.id}>
+                                    <Link to={`/movie/${item.id}`}>
+                                        <span>{item.title || item.name}</span>
+                                    </Link>
+                                    <button onClick={() => handleRemoveFromFavorites(item.id)}>Удалить</button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </>
+                :
+                <>
+                    <div className="favorites ml-4">
+                        <h3>Избранные</h3>
+                        <ul>
+
+                        </ul>
+                    </div>
+                </>}
+
             {isAdmin && (
                 <section className="admin-panel">
                     <h2>Административная панель</h2>

@@ -1,62 +1,62 @@
 import axiosCLient from "./axiosClient"
 
-export const category = { 
-    movie: 'movie', 
-    tv: 'tv', 
+export const category = {
+    movie: 'movie',
+    tv: 'tv',
     person: 'person'
-} 
-export const movieType = { 
+}
+export const movieType = {
     upcoming: 'upcoming',
-    popular:'popular', 
-    top_rated: 'top_rated', 
+    popular: 'popular',
+    top_rated: 'top_rated',
     horror: 'horror'
-} 
-export const tvType = { 
-    on_the_air:'on_the_air',
-    popular:'popular', 
+}
+export const tvType = {
+    on_the_air: 'on_the_air',
+    popular: 'popular',
     top_rated: 'top_rated'
-} 
-const tmdbApi ={ 
-    getMoviesList: (type,params) =>{ 
-        const url = 'movie/' + movieType[type] 
-        return axiosCLient.get(url,params)
-    }, 
-    getTvList: (type, params) => { 
-        const url =  'tv/' + tvType[type] 
+}
+const tmdbApi = {
+    getMoviesList: (type, params) => {
+        const url = 'movie/' + movieType[type]
         return axiosCLient.get(url, params)
     },
-    getVideos: (type, id) => {  
-        const url =  category[type] + '/' + id + '/videos'; 
-        return axiosCLient.get(url, {params:{}})
-    },
-    search: (type, params) => { 
-        const url =  'search/' + category[type]; 
+    getTvList: (type, params) => {
+        const url = 'tv/' + tvType[type]
         return axiosCLient.get(url, params)
     },
-    detail: (type, id, params) => { 
-        const url =  category[type] + '/' + id
+    getVideos: (type, id) => {
+        const url = category[type] + '/' + id + '/videos';
+        return axiosCLient.get(url, { params: {} })
+    },
+    search: (type, params) => {
+        const url = 'search/' + category[type];
         return axiosCLient.get(url, params)
     },
-    credits: (type, id) => { 
-        const url =  category[type] + '/' + id + '/credits'
-        return axiosCLient.get(url, {params:{}})
-    },
-    similar: (type, id) => { 
-        const url =  category[type] + '/' + id + '/similar'
-        return axiosCLient.get(url, {params:{}})
-    }, 
-    recomendation: (type, id) => { 
-        const url =  category[type] + '/' + id + '/recommendations'
-        return axiosCLient.get(url, {params:{}})
-    },  
-    person: (id, params) =>{ 
-        const url = 'person/' + id 
+    detail: (type, id, params) => {
+        const url = category[type] + '/' + id
         return axiosCLient.get(url, params)
-    }, 
-    personCombinedCredits:(id) =>{ 
+    },
+    credits: (type, id) => {
+        const url = category[type] + '/' + id + '/credits'
+        return axiosCLient.get(url, { params: {} })
+    },
+    similar: (type, id) => {
+        const url = category[type] + '/' + id + '/similar'
+        return axiosCLient.get(url, { params: {} })
+    },
+    recomendation: (type, id) => {
+        const url = category[type] + '/' + id + '/recommendations'
+        return axiosCLient.get(url, { params: {} })
+    },
+    person: (id, params) => {
+        const url = 'person/' + id
+        return axiosCLient.get(url, params)
+    },
+    personCombinedCredits: (id) => {
         const url = 'person/' + id + '/combined_credits'
-        return axiosCLient.get(url, {params:{}})
+        return axiosCLient.get(url, { params: {} })
     }
-    
-} 
+
+}
 export default tmdbApi

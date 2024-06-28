@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import 'swiper/css';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import s from './CatalogFilters.module.css'
 import MovieGrid from '../../components/movie-grid/MovieGrid';
+import PageHeader from '../../components/page-header/PageHeader';
+import { category as cate } from '../../api/tmdb';
+import Preloader from '../../components/Preloader/Preloader';
 
 const ToggleSection = ({ title, onClick }) => {
   return (
@@ -129,12 +133,20 @@ function CatalogMenu() {
 }
 
 const CatalogFilters = () => {
+  const {category} = useParams() 
+  const [isError, setError] = useState(false) 
+  if(isError){ 
+    return <Preloader/>
+  }
   return (
     <>
+     <PageHeader> 
+        {category === cate.movie ? "Movies"  : category === cate.tv ? 'Tv Series' : 'Catalog'}
+      </PageHeader> 
       <main className={s.main}>
         <CatalogMenu />
         <div className='mt-32 ml-4'>
-          <MovieGrid />
+          <MovieGrid setError={setError}  category={category}/>
         </div>
       </main>
     </>

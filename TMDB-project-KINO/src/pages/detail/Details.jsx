@@ -9,13 +9,8 @@ import Movie from '../../components/movie/MovieList';
 import Preloader from '../../components/Preloader/Preloader';
 import TVSeasons from './TVSeasons';
 import { useFavorites } from './context';
-// import { ChakraProvider } from '@chakra-ui/react'
-// import {
-//     Alert,
-//     AlertIcon,
-//     AlertTitle,
-//     AlertDescription,
-// } from '@chakra-ui/react'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Detail = () => {
     const { category, id } = useParams();
@@ -23,6 +18,7 @@ const Detail = () => {
     const [item, setItems] = useState(null);
     const [isError, setError] = useState(false);
     const { addToFavorites } = useFavorites();
+    const notify = () => toast("Successfully") | addToFavorites(item);;
 
     useEffect(() => {
         const getDetail = async () => {
@@ -103,8 +99,9 @@ const Detail = () => {
                                 <div className="details__info">
                                     Runtime: <span>{item?.runtime ? item.runtime + ' minutes' : 'Unknown'}</span>
                                 </div>
-                                <div onClick={handleAddToFavorites} className="details__info cursor-pointer">
-                                    Add to favorites
+                                <div className="details__info cursor-pointer">
+                                    <button onClick={notify}>Add to favorites</button>
+                                    <ToastContainer />
                                 </div>
                             </div>
                             <div className="cast">

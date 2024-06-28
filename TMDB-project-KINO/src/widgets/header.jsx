@@ -25,7 +25,7 @@ const headerNav = [
   },
   {
     display: 'Profile',
-    path: '/profile'
+    path: '/personal-area'
   }
 ];
 const Header = () => {

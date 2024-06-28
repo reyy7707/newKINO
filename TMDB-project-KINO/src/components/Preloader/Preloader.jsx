@@ -2,8 +2,8 @@
 const Preloader = () => {
   return (
     <>
-        <div className='flex items-center justify-center w-full h-full'>
-            <div className="animate-spin bg-blue-500"></div>
+        <div className='flex w-full h-full justify-center items-center'>
+            <div className="animate-spin rounded-full w-[35px] h-[35px] border border-t-blue-500"></div>
         </div>
     </>
   )
