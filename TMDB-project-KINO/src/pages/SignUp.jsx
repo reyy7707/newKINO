@@ -1,122 +1,101 @@
-//Компоненты
-
-//Стили
-
-//Библиотеки
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { auth } from '../firebase/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
-import { useMediaQuery } from '@react-hook/media-query';
 
 const SignUp = () => {
-    document.cookie = 'cookieName=cookieValue; SameSite=None; Secure';
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [copyPassword, setCopyPassword] = useState('');
     const [error, setError] = useState('');
-    const [showPass, setShowPass] = useState(false)
-    const [eye, setEye] = useState('invalid')
-    const isMobile = useMediaQuery('(max-width: 729px)')
-    const [errorinfo, setErrorinfo] = useState()
+    const [showPass, setShowPass] = useState(false);
 
-    const handlePassword = () => {
-        setShowPass(!showPass);
-        setEye('invalid')
-    };
-    const secondHandlePassword = () => {
-        setShowPass(!showPass);
-        setEye('valid')
-    }
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
+    const handlePassword = () => setShowPass(!showPass);
 
-    function register(e) {
-        e.preventDefault()
+    const register = (e) => {
+        e.preventDefault();
         if (password !== copyPassword) {
-            setError("Password mismatch")
-            return
+            setError("Password mismatch");
+            return;
         }
-        createUserWithEmailAndPassword(auth, email, password).then(() => {
-            setError('')
-            setEmail('');
-            setPassword('');
-            setCopyPassword('');
-            localStorage.setItem('KINOauth', true)
-            navigate('/personal-area')
-        })
-            .catch((error) => setErrorinfo(error.message))
-    }
-    useEffect(() => {
-        console.log(errorinfo);
-        if (errorinfo === 'Firebase: Error (auth/invalid-email).') {
-            console.log('Invalid email');
-        } else {
-            console.log('succes');
-        }
-    }, [register])
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                setError('');
+                setEmail('');
+                setPassword('');
+                setCopyPassword('');
+                localStorage.setItem('KINOauth', true);
+                navigate('/personal-area');
+            })
+            .catch((error) => setError(error.message));
+    };
 
     return (
-        <>
-            <div className='w-full h-auto items-center justify-center flex bg-white'>
-                <div className={` ${isMobile ? "w-5/6" : "w-2/6"}   h-auto flex flex-col mt-32 shadow-2xl border`}>
-                    <form
-                        onSubmit={register}
-                        className='flex flex-col items-center relative'>
-                        <div className='flex items-start flex-col'>
-                            <h1 className={` ${isMobile ? "text-2xl" : "text-4xl"}  text-clip pt-8 textblack opacity-90 text-black`}> Регистрация аккаунта </h1>
-                        </div>
-                        <h1 className={` ${isMobile ? "" : "relative right-32"} pt-8 text-black`}> Введите свою почту* </h1>
+        <div className="flex items-center justify-center min-h-screen bg-gray-50">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                <div className="mb-4">
+                    <Link to="/sign-in" className="mr-4 text-black">Вход</Link>
+                    <span className="font-bold text-black">Регистрация</span>
+                </div>
+                <form onSubmit={register} className="space-y-6">
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">E-mail</label>
                         <input
+                            id="email"
+                            type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder='Введите почту'
-                            type='email'
-                            className={` ${isMobile ? "w-5/6" : "w-4/6"} border shadow bg-white rounded-md p-3  text-xl pl-8 mt-2`} />
-                        <h1 className={` ${isMobile ? "" : "relative right-32"} pt-8 text-black`}> Придумайте пароль* </h1>
-                        <div className='flex relative w-full items-center justify-center'>
+                            className="mt-1 p-2 w-full border rounded-md"
+                            required
+                            placeholder='Введите ваш e-mail'
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Пароль</label>
+                        <div className="relative">
                             <input
+                                id="password"
+                                type={showPass ? 'text' : 'password'}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder='Введите пароль'
-                                type={showPass ? 'text' : 'password'}
-                                className={` ${isMobile ? "w-5/6" : "w-4/6"} border shadow bg-white rounded-md p-3  text-xl pl-8 mt-2`} />
-                            <div className='flex'>
-                                {eye === 'invalid' && <img className={` ${isMobile ? "absolute right-12" : "absolute right-32"} w-6 h-6 cursor-pointer bottom-3`} onClick={secondHandlePassword} alt='eyeHidden' src='https://cdn-icons-png.flaticon.com/128/2767/2767146.png' />}
-                                {eye === 'valid' && <img className={` ${isMobile ? "absolute right-12" : "absolute right-32"} w-6 h-6 cursor-pointer bottom-3`} onClick={handlePassword} alt='eyeValid' src='https://cdn-icons-png.flaticon.com/128/709/709612.png' />}
-                            </div>
+                                className="mt-1 p-2 w-full border rounded-md"
+                                required
+                                placeholder='Придумайте пароль'
+                            />
+                            <span className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onClick={handlePassword}>
+                                <img src={showPass ? 'https://cdn-icons-png.flaticon.com/128/709/709612.png' : 'https://cdn-icons-png.flaticon.com/128/2767/2767146.png'} alt="eye" className="h-5 w-5" />
+                            </span>
                         </div>
-
-                        <h1 className={` ${isMobile ? "" : "relative right-32"} pt-8 text-black`}> Повторите пароль* </h1>
-                        <div className='flex relative w-full items-center justify-center'>
+                    </div>
+                    <div>
+                        <label htmlFor="copyPassword" className="block text-sm font-medium text-gray-700">Повторите пароль</label>
+                        <div className="relative">
                             <input
+                                id="copyPassword"
+                                type={showPass ? 'text' : 'password'}
                                 value={copyPassword}
                                 onChange={(e) => setCopyPassword(e.target.value)}
-                                placeholder='Введите пароль повторно'
-                                type={showPass ? 'text' : 'password'}
-                                className={` ${isMobile ? "w-5/6" : "w-4/6"} border shadow bg-white rounded-md p-3  text-xl pl-8 mt-2`} />
-                            <div className='flex'>
-                                {eye === 'invalid' && <img className={` ${isMobile ? "absolute right-12" : "absolute right-32"} w-6 h-6 cursor-pointer bottom-3`} onClick={secondHandlePassword} alt='eyeHidden' src='https://cdn-icons-png.flaticon.com/128/2767/2767146.png' />}
-                                {eye === 'valid' && <img className={` ${isMobile ? "absolute right-12" : "absolute right-32"} w-6 h-6 cursor-pointer bottom-3`} onClick={handlePassword} alt='eyeValid' src='https://cdn-icons-png.flaticon.com/128/709/709612.png' />}
-                            </div>
+                                className="mt-1 p-2 w-full border rounded-md"
+                                required
+                                placeholder='Повторите пароль'
+                            />
+                            <span className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onClick={handlePassword}>
+                                <img src={showPass ? 'https://cdn-icons-png.flaticon.com/128/709/709612.png' : 'https://cdn-icons-png.flaticon.com/128/2767/2767146.png'} alt="eye" className="h-5 w-5" />
+                            </span>
                         </div>
-                        <div className={` ${isMobile ? "" : "relative right-32"} flex items-center pt-4`}>
-                            <input type='checkbox' className='w-5 h-5' /> <h1 className='pl-2 text-black'> Запомнить меня </h1>
-                            
-                        </div>
-                        <div className='flex w-full'>
-                            <Link className={` ${isMobile ? "pl-20" : "pl-28"} flex  pt-4 items-center text-black`} to={'/sign-in'}> <h1> Уже есть аккаунт? </h1> <span className='text-blue-500 pl-1'> Войти </span> </Link>
-                        </div>
-                        <button
-                            className='bg-blue-500 rounded-md mt-8 p-4 w-4/6 text-white text-xl'> Зарегистрироваться </button>
-                        {error ? <p className='text-red-500'> {error} </p> : ''}
-                        <div className='flex pb-12'></div>
-                    </form>
-                </div>
+                    </div>
+                    <div className="flex items-center">
+                        <input id="remember" type="checkbox" className="h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+                        <label htmlFor="remember" className="ml-2 block text-sm text-gray-900">Запомнить меня</label>
+                    </div>
+                    <button type="submit" className="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700">Зарегистрироваться</button>
+                    {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+                </form>
             </div>
-            <div className='w-full h-full bg-white pb-36'></div>
-        </>
-    )
-}
+        </div>
+    );
+};
 
-export default SignUp
+export default SignUp;

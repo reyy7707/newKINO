@@ -1,91 +1,81 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react';
 import { auth } from '../firebase/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { useMediaQuery } from '@react-hook/media-query'
+import { useNavigate, Link } from 'react-router-dom';
 
 const SignIn = () => {
-    document.cookie = 'cookieName=cookieValue; SameSite=None; Secure';
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [showPass, setShowPass] = useState(false)
-    const [eye, setEye] = useState('invalid')
-    const isMobile = useMediaQuery('(max-width: 729px)')
+    const [showPass, setShowPass] = useState(false);
 
-    const handlePassword = () => {
-        setShowPass(!showPass);
-        setEye('invalid')
-    };
-    const secondHandlePassword = () => {
-        setShowPass(!showPass);
-        setEye('valid')
-    }
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
+    const handlePassword = () => setShowPass(!showPass);
 
-    function LogIn(e) {
-        e.preventDefault()
-
-        signInWithEmailAndPassword(auth, email, password).then((user) => {
-            localStorage.setItem('KINOauth', true)
-            setError('');
-            setEmail('');
-            setPassword('');
-            navigate('/personal-area')
-        })
+    const LogIn = (e) => {
+        e.preventDefault();
+        signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                localStorage.setItem('KINOauth', true);
+                setError('');
+                setEmail('');
+                setPassword('');
+                navigate('/personal-area');
+            })
             .catch((error) => {
                 setError('Мы не смогли найти ваш аккаунт');
-                console.log(error);
-            })
-    }
+                console.error(error);
+            });
+    };
 
     return (
-        <>
-            <div className='w-full h-auto items-center justify-center flex bg-white'>
-                <div className={` ${isMobile ? "w-5/6" : "w-2/6"}  h-auto flex flex-col mt-32 shadow-2xl border`}>
-                    <form
-                        onSubmit={LogIn}
-                        className='flex flex-col items-center relative gap-4'>
-                        <h1 className='text-4xl text-clip pt-8 text-black opacity-901'> Вход </h1>
+        <div className="flex items-center justify-center min-h-screen bg-gray-50">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                <div className="mb-4">
+                    <span className="font-bold text-black">Вход</span>
+                    <Link to="/sign-up" className="ml-4 text-black">Регистрация</Link>
+                </div>
+                <form onSubmit={LogIn} className="space-y-6">
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">E-mail</label>
                         <input
+                            id="email"
+                            type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder='Введите почту'
-                            type='email'
-                            className={` ${isMobile ? "w-5/6" : "w-4/6"} border shadow bg-white rounded-md p-3  text-xl pl-8 mt-2`} />
-                        <div className='flex relative w-full items-center justify-center'>
+                            className="mt-1 p-2 w-full border rounded-md"
+                            required
+                            placeholder='Введите ваш e-mail'
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Пароль</label>
+                        <div className="relative">
                             <input
+                                id="password"
+                                type={showPass ? 'text' : 'password'}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder='Введите пароль'
-                                type={showPass ? 'text' : 'password'}
-                                className={` ${isMobile ? "w-5/6" : "w-4/6"} border shadow bg-white rounded-md p-3  text-xl pl-8 mt-2`}
-                                required="true" />
-                            <div className='flex'>
-                                {eye === 'invalid' && <img className={` ${isMobile ? "absolute right-12" : "absolute right-32"} w-6 h-6 cursor-pointer bottom-3`} onClick={secondHandlePassword} alt='eyeHidden' src='https://cdn-icons-png.flaticon.com/128/2767/2767146.png' />}
-                                {eye === 'valid' && <img className={` ${isMobile ? "absolute right-12" : "absolute right-32"} w-6 h-6 cursor-pointer bottom-3`} onClick={handlePassword} alt='eyeValid' src='https://cdn-icons-png.flaticon.com/128/709/709612.png' />}
-                            </div>
+                                className="mt-1 p-2 w-full border rounded-md"
+                                required
+                                placeholder='Введите ваш пароль'
+                            />
+                            <span className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onClick={handlePassword}>
+                                <img src={showPass ? 'https://cdn-icons-png.flaticon.com/128/709/709612.png' : 'https://cdn-icons-png.flaticon.com/128/2767/2767146.png'} alt="eye" className="h-5 w-5" />
+                            </span>
                         </div>
-                        <div className={` ${isMobile ? "" : "relative right-32"} flex items-center pt-4`}>
-                            <input type='checkbox' className='w-5 h-5' /> <h1 className='pl-2 text-black'> Запомнить меня </h1>
-                        </div>
-                        <div className={`  ${isMobile ? "" : ""} flex w-full`}>
-                            <Link to={'/sign-up'}> <h1 className={`  ${isMobile ? "pl-10" : "pl-28"} p-2 text-sm text-black`}> Еще нет аккаунта? <span className='text-blue-500'> Зарегистрируйтесь </span> </h1> </Link>
-                        </div>
-                        <button
-                            onClick={LogIn}
-                            className='bg-blue-500 rounded-md mt-2 p-4 w-4/6 text-white text-xl'> Войти </button>
-                        {error ? <p className='text-red-500'> {error} </p> : ''}
-
-                        <div className='flex pb-8'></div>
-                    </form>
-                </div>
+                    </div>
+                    <div className="flex items-center">
+                        <input id="remember" type="checkbox" className="h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+                        <label htmlFor="remember" className="ml-2 block text-sm text-gray-900">Запомнить меня</label>
+                    </div>
+                    <button type="submit" className="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700">Войти</button>
+                    {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+                </form>
             </div>
-            <div className='w-full h-full pb-96 bg-white'></div>
-        </>
-    )
-}
+        </div>
+    );
+};
 
-export default SignIn
+export default SignIn;
