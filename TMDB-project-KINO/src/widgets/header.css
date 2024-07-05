@@ -93,7 +93,9 @@
   .header__wrap{ 
     justify-content: center;
   }
-  
+  .header__link {
+    font-size: small;
+  }
   .header__nav li {  
     font-family: 'Montserrat',sans-serif;
     margin-left: 0; 

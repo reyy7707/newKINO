@@ -100,6 +100,7 @@ body {
   padding: 0rem;
   background-color: #0f0f0f;
   overflow-y: auto;
+  position: relative; top: 96px;
 }
 
 .main-content section {
@@ -306,3 +307,24 @@ body {
   background-color: #d32f2f;
 }
 
+
+@media screen and (max-width: 600px) {
+  .dashboard-content {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .sidebar {
+    width: 94.4%;
+    height: auto;
+    margin-left: 16px;
+  }
+  .main-content {
+    width: 97%;
+    margin-top: 30px;
+  }
+  /* .form {
+    display: flex;
+    gap: 4;
+    align-items: center;
+  } */
+}

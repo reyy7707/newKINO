@@ -4,6 +4,7 @@ import { auth } from '../firebase/firebase';
 import { Link } from 'react-router-dom';
 import './AuthDetails.css';
 import { useFavorites } from './detail/context';
+
 // import { useNavigate } from 'react-router-dom';
 
 const AuthDetails = () => {
@@ -146,12 +147,67 @@ const Sidebar = ({
     HandleChange6,
     HandleChange7,
 }) => {
+    const [clickCount, setClickCount] = useState(0);
+    const [spinning, setSpinning] = useState(false);
+    const [popAp, setPopAp] = useState(false);
+    const [displayName, setDisplayName] = useState('');
+    const [nameInput, setNameInput] = useState('');
+
+    useEffect(() => {
+        // Загрузка имени из localStorage при монтировании компонента
+        const storedName = localStorage.getItem('displayName');
+        if (storedName) {
+            setDisplayName(storedName);
+        }
+    }, []);
+
+    const onHandleOpenPop = () => {
+        setPopAp(!popAp);
+    };
+
+    const submitName = (event) => {
+        event.preventDefault();
+        localStorage.setItem('displayName', nameInput);
+        setDisplayName(nameInput);
+        setPopAp(false);
+    };
+
+    const handleClick = () => {
+        setClickCount((prevCount) => prevCount + 1);
+
+        if (clickCount + 1 === 3) {
+            setSpinning(true);
+            setClickCount(0);
+
+            setTimeout(() => {
+                setSpinning(false);
+            }, 3000);
+        }
+    };
+
     return (
         <aside className="sidebar relative top-24 items-center">
             <div className="avatar items-center justify-center">
-                <img src={img || backgroundChange} alt="User Avatar" />
+                <img src={img || backgroundChange} className={spinning ? 'animate-spin' : ''} onClick={handleClick} alt="User Avatar" />
             </div>
-            <h2>Имя Пользователя</h2>
+            <button onClick={onHandleOpenPop} className="pt-2 text-lg">
+                {popAp ? 'Имя пользователя' : displayName ? displayName : 'Имя пользователя'}
+            </button>
+            {popAp && (
+                <form onSubmit={submitName}>
+                    <input
+                        type="text"
+                        placeholder="Введите новое имя"
+                        minLength={3}
+                        className="p-1 relative bottom-5"
+                        value={nameInput}
+                        onChange={(e) => setNameInput(e.target.value)}
+                    />
+                    <button type="submitName" className="hover:text-[#cfcfcf]">
+                        Сохранить
+                    </button>
+                </form>
+            )}
             <p>Короткая информация о пользователе</p>
             <button onClick={toggleShowActiveBackgrounds} className="edit_btn w-11/12 h-[60px] text-lg">
                 {showActiveBackgrounds ? 'Скрыть' : 'Редактировать'}
@@ -192,7 +248,7 @@ const MainContent = ({
             .catch((e) => console.log(e));
     };
     return (
-        <main className="main-content relative top-24">
+        <main className="main-content">
             <section className="user-info">
                 <h2>Информация о пользователе</h2>
                 {authUser ? (
@@ -245,7 +301,16 @@ const MainContent = ({
                     <button onClick={() => setAdminPanel(!adminPanel)}>
                         {adminPanel ? 'Скрыть' : 'Показать'} панель
                     </button>
-                    {adminPanel && <p>Админка</p>}
+                    {adminPanel &&
+                        <div>
+                            <p>
+                                <a target='_blank' href='https://console.firebase.google.com/u/0/project/aaa-web-9346f/authentication/users'>Управление аккаунтами пользователей</a>
+                            </p>
+                            <p>
+                                <a target='_blank' href=''></a>
+                            </p>
+                        </div>
+                    }
                 </section>
             )}
         </main>

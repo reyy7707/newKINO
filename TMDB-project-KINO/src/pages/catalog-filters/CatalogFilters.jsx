@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react';
 import 'swiper/css';
-// import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import s from './CatalogFilters.module.css'
-import MovieGrid from '../../components/movie-grid/MovieGrid';
 import PageHeader from '../../components/page-header/PageHeader';
-import { category as cate } from '../../api/tmdb';
-import Preloader from '../../components/Preloader/Preloader';
+// import { category as cate } from '../../api/tmdb';
+import tmdbApi, { movieType, tvType } from '../../api/tmdb';
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { category } from '../../api/tmdb';
+import MovieCard from '../../components/movie-card/MovieCard';
+import { OutlinedButton } from '../../components/button/Button';
+import Input from '../../components/input/input';
 
 const ToggleSection = ({ title, onClick }) => {
   return (
@@ -132,24 +134,152 @@ function CatalogMenu() {
   );
 }
 
-const CatalogFilters = () => {
-  const {category} = useParams() 
-  const [isError, setError] = useState(false) 
-  if(isError){ 
-    return <Preloader/>
-  }
+const MovieGrid = (props) => {
+
+  const [items, setItems] = useState([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const { keyword } = useParams();
+
+  useEffect(() => {
+    const getList = async () => {
+      try {
+        let res = null;
+
+        if (keyword === undefined) {
+          const params = {};
+          switch (props.category) {
+            case category.movie:
+              res = await tmdbApi.getMoviesList(movieType.upcoming, { params });
+              break;
+            case category.person:
+              res = await tmdbApi.person("popular", { params });
+              break;
+            default:
+              res = await tmdbApi.getTvList(tvType.popular, { params });
+          }
+        } else {
+          const params = {
+            query: keyword,
+          };
+          res = await tmdbApi.search(props.category, { params });
+        }
+        setItems(res.data.results);
+        setTotal(res.data.total_pages);
+      } catch (error) {
+        console.log(error);
+        props.setError(true);
+      }
+    };
+    getList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keyword, props.category]);
+  const loadMore = async () => {
+    let res = null;
+    if (keyword === undefined) {
+      const params = {
+        page: page + 1,
+      };
+      switch (props.category) {
+        case category.movie:
+          res = await tmdbApi.getMoviesList(movieType.upcoming, { params });
+          break;
+        case category.person:
+          res = await tmdbApi.person("popular", { params });
+          break;
+        default:
+          res = await tmdbApi.getTvList(tvType.popular, { params });
+      }
+    } else {
+      const params = {
+        query: keyword,
+        page: page + 1,
+      };
+      res = await tmdbApi.search(props.category, { params });
+    }
+    setItems([...items, ...res.data.results]);
+    setPage(page + 1);
+  };
   return (
     <>
-     <PageHeader> 
-        {category === cate.movie ? "Movies"  : category === cate.tv ? 'Tv Series' : 'Catalog'}
-      </PageHeader> 
+      <div>
+        <MovieSearch keyword={keyword} category={props.category} />
+      </div>
+      {items.length === 0 && (
+        <div className="movie-no-result">No results matching your search</div>
+      )}
+      <div className="movie-grid">
+        {items.map((item, index) => (
+          <MovieCard
+            isActor={props.category === "person"}
+            item={item}
+            key={index}
+            category={props.category}
+          />
+        ))}
+      </div>
+      {page < total ? (
+        <div className="movie-grid__loadmore">
+          <OutlinedButton className="small" onClick={loadMore}>
+            Load More
+          </OutlinedButton>
+        </div>
+      ) : null}
+    </>
+  );
+};
+const MovieSearch = (props) => {
+  const nav = useNavigate();
+
+  const [keyword, setKeyword] = useState(props.keyword ? props.keyword : "");
+  const goToSearch = useCallback(() => {
+    if (keyword.trim().length > 0) {
+      nav(`/movie/search/${keyword}`);
+    }
+  }, [keyword, props.category, nav]);
+  useEffect(() => {
+    const enterEvent = (e) => {
+      e.preventDefault();
+      if (e.keyCode === 13) {
+        goToSearch();
+      }
+    };
+    document.addEventListener("keyup", enterEvent);
+    return () => {
+      document.removeEventListener("keyup", enterEvent);
+    };
+  }, [goToSearch, keyword]);
+  return (
+    <div className="movie-search">
+      <Input
+        type={"text"}
+        placeholder={"Enter keyword"}
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+      ></Input>
+      <button className='px-2 py-1 ml-3 bg-blue-600 text-white rounded-full' onClick={goToSearch}>
+        Search
+      </button>
+    </div>
+  );
+};
+
+const CatalogFilters = () => {
+  const { category } = useParams();
+
+  return (
+    <>
+      <PageHeader>
+        {category === 'movie' ? "Movies" : category === 'tv' ? 'Tv Series' : 'Catalog'}
+      </PageHeader>
       <main className={s.main}>
         <CatalogMenu />
         <div className='mt-32 ml-4'>
-          <MovieGrid setError={setError}  category={category}/>
+          <MovieGrid/>
         </div>
       </main>
     </>
-  )
+  );
 }
+
 export default CatalogFilters

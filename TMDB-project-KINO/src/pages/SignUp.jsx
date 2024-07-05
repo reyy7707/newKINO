@@ -11,7 +11,6 @@ import { useMediaQuery } from '@react-hook/media-query';
 
 const SignUp = () => {
     document.cookie = 'cookieName=cookieValue; SameSite=None; Secure';
-    const [displayName, setDisplayName] = useState('')
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [copyPassword, setCopyPassword] = useState('');
@@ -38,8 +37,7 @@ const SignUp = () => {
             setError("Password mismatch")
             return
         }
-        createUserWithEmailAndPassword(auth, email, password, displayName).then(() => {
-            setDisplayName('')
+        createUserWithEmailAndPassword(auth, email, password).then(() => {
             setError('')
             setEmail('');
             setPassword('');
@@ -107,7 +105,7 @@ const SignUp = () => {
                             
                         </div>
                         <div className='flex w-full'>
-                            <Link className={` ${isMobile ? "pl-20" : "pl-28"} flex  pt-4 items-center text-blue-500`} to={'/sign-in'}> <h1> Уже есть аккаунт? </h1> <span className='text-blue-500 pl-1'> Войти </span> </Link>
+                            <Link className={` ${isMobile ? "pl-20" : "pl-28"} flex  pt-4 items-center text-black`} to={'/sign-in'}> <h1> Уже есть аккаунт? </h1> <span className='text-blue-500 pl-1'> Войти </span> </Link>
                         </div>
                         <button
                             className='bg-blue-500 rounded-md mt-8 p-4 w-4/6 text-white text-xl'> Зарегистрироваться </button>

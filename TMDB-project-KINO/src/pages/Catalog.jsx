@@ -5,6 +5,7 @@ import PageHeader from '../components/page-header/PageHeader'
 import MovieGrid from '../components/movie-grid/MovieGrid' 
 import '../App.css'
 import Preloader from '../components/Preloader/Preloader'
+
 const Catalog = () => { 
   const {category} = useParams() 
   const [isError, setError] = useState(false) 
